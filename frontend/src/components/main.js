@@ -5,7 +5,12 @@ function UploadData() {
   const [file, setFile] = useState(null);
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState({ organization_name: '', website: '' });
+  const [searchQuery, setSearchQuery] = useState({
+    organization_name: '',
+    website: '',
+    number_of_employees: '',
+    contact_name: '',
+  });
 
   const handleFileChange = (e) => setFile(e.target.files[0]);
 
@@ -74,25 +79,24 @@ function UploadData() {
   return (
     <>
       <style>{`
-        /* Apply gradient to the entire page */
-html, body {
+     html, body {
   margin: 0;
-  height: 100%; 
-  background:rgb(32, 226, 210);
-  background-size: cover;
-  background-attachment: fixed; /* Keeps the background fixed during scroll */
-  
+  padding: 0;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #1c92d2, #f2fcfe);
+  color: #333;
 }
 
 .container {
   display: flex;
-  min-height: 100vh; /* Ensure container takes full height */
-  width: 100%;
+  min-height: 100vh;
 }
 
 .sidebar {
-  width: 15%;
-  background-color: white; /* Slight transparency for blending */
+  width: 10%;
+  background-color: rgb(145,8,8);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,69 +104,129 @@ html, body {
 }
 
 .sidebar button {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: black;
-  color: white;
-  border: none;
-  border-radius: 34px;
-  cursor: pointer;
   width: 100%;
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Add transition for transform and shadow */
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(237,232,208);
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-/* Hover state with animation */
 .sidebar button:hover {
-  background-color:rgb(15, 217, 224);
-  color: white; /* Optional: Change text color */
-  transform: translateY(-5px); /* Slightly lift the button */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+  background-color:rgb(207, 50, 50);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .main-content {
   flex: 1;
   padding: 20px;
-  color: #fff; /* Ensure text is readable on the dark background */
+  background-color: rgb(237,232,208);
+  overflow-y: auto;
 }
 
 .search-section {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-bottom: 20px;
-  width: 100%; /* Ensure the section takes the full width */
 }
 
-.search-section textarea,
-.search-section input {
-  flex: 1; /* Allow input and textarea to take equal space */
-  padding: 12px 20px; /* Increase padding for better appearance */
-  border-radius: 20px; /* Make the fields oval-shaped */
-  border: 1px solid #ccc;
-  background-color: #fff;
-  color: #333; /* Ensure text is readable */
-  font-size: 16px; /* Set font size for readability */
-  margin-right: 10px; /* Space between input fields */
-  transition: border-color 0.3s ease; /* Smooth transition for focus */
-}
-
-/* Optional: Adjust the width of the text area */
 .search-section textarea {
-  resize: none; /* Prevent resizing */
+  flex: 1;
+  min-width: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+  font-size: 14px;
 }
 
-.search-section textarea:focus,
-.search-section input:focus {
-  border-color: rgb(3, 17, 65); /* Change border color on focus */
-  outline: none; /* Remove default outline */
+.search-section textarea:focus {
+  border-color:rgb(145,8,8);
+  outline: none;
 }
 
-.search-section input:last-child {
-  margin-right: 0; /* Remove right margin from the last input */
+.table-container {
+  overflow-x: auto;
 }
+
+.data-table td.lead-investor {
+  width: 200px; /* Set a fixed width */
+  height: 100px; /* Set a fixed height */
+  white-space: normal; /* Allow text wrapping */
+  overflow-y: auto; /* Enable vertical scrolling for overflow */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  text-overflow: ellipsis; /* Add ellipsis if necessary */
+  padding: 10px; /* Add padding for better readability */
+  display: block; /* Ensure the content fits inside the box */
+  border: 1px solid #ccc; /* Optional: Add a border for visual distinction */
+  background-color: #f9f9f9; /* Optional: Add a light background color */
+}
+
+
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
 .data-table th, .data-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px 15px;
   text-align: left;
-  color: black;
+  border: 1px solid #ddd;
+  vertical-align: top;
+}
+
+.data-table th {
+  background-color: rgb(145,8 ,8);
+  color: white;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.data-table td {
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Prevent overflow */
+  text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+}
+
+.data-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.data-table tr:hover {
+  background-color: #ddd;
+}
+
+/* For small screens */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
+
+  .search-section {
+    flex-direction: column;
+  }
 }
 
 
@@ -180,51 +244,165 @@ html, body {
           <button onClick={handleExport}>Export Data</button>
         </div>
 
-        <div className="main-content">
-          <div className="search-section">
-            <textarea
-              name="organization_name"
-              value={searchQuery.organization_name}
-              onChange={handleSearchChange}
-              placeholder="Search by company name"
-            />
-            <input
-              type="text"
-              name="website"
-              value={searchQuery.website}
-              onChange={handleSearchChange}
-              placeholder="Search by Website"
-            />
-          </div>
+            <div className="main-content">
+              <div className="search-section">
+                <textarea
+                  name="organization_name"
+                  value={searchQuery.organization_name}
+                  onChange={handleSearchChange}
+                  placeholder="Search by Organization Name"
+                />
+
+                <textarea
+                  name="number_of_employees"
+                  value={searchQuery.number_of_employees}
+                  onChange={handleSearchChange}
+                  placeholder="Search by Number of Employees"
+                />
+                
+                <textarea
+                  name="contact_name" 
+                  value={searchQuery.contact_name || ''} 
+                  onChange={handleSearchChange}
+                  placeholder="Search by Name"
+                />
+
+                <textarea
+                  name="contact_title"
+                  value={searchQuery.contact_title}
+                  onChange={handleSearchChange}
+                  placeholder="Search by Title"
+                />
+                <textarea
+                  name="linkedin_url"
+                  value={searchQuery.linkedin_url}
+                  onChange={handleSearchChange}
+                  placeholder="Search by Linkedin"
+                />
+                 <textarea
+                  name="website"
+                  value={searchQuery.website}
+                  onChange={handleSearchChange}
+                  placeholder="Search by Website"
+                />
+                {/* <textarea
+                  type="text"
+                  name="headquarters_location"
+                  value={searchQuery.headquarters_location}
+                  onChange={handleSearchChange}
+                  placeholder="Search by Headquarters Location"
+                /> */}
+                
+                {/* <textarea
+                  type="text"
+                  name="linkedin_url"
+                  value={searchQuery.linkedin_url}
+                  onChange={handleSearchChange}
+                  placeholder="Search by LinkedIn URL"
+                  
+                /> */}
+                
+               
+                
+              </div>
+            
 
           <div className="table-container">
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>Organization Name</th>
-                  <th>Website</th>
-                  <th>Number of Employees</th>
-                  <th>Estimated Revenue</th>
-                  <th>Contact Name</th>
-                  <th>Contact Title</th>
-                  <th>Industries</th>
-                  <th>Headquarters</th>
-                  <th>LinkedIn</th>
+                    <th>Organization Name</th>
+                    <th>Monthly Visits</th>
+                    <th>Founded Date</th>
+                    <th>Operating Status</th>
+                    <th>Company Type</th>
+                    <th>IPO Status</th>
+                    <th>Number of Employees</th>
+                    <th>Contact Job Departments</th>
+                    <th>Actively Hiring</th>
+                    <th>Last Funding Date</th>
+                    <th>Estimated Revenue Range</th>
+                    <th>Last Funding Type</th>
+                    <th>Industries</th>
+                    <th>Headquarters Location</th>
+                    <th>Description</th>
+                    <th>CB Rank (Company)</th>
+                    <th>Headquarters Regions</th>
+                    <th>Website</th>
+                    <th>Contact Email</th>
+                    <th>Phone Number</th>
+                    <th>Last Funding Amount</th>
+                    <th>Last Funding Amount Currency</th>
+                    <th>Last Funding Amount (in USD)</th>
+                    <th>Funding Status</th>
+                    <th>Number of Funding Rounds</th>
+                    <th>Last Equity Funding Amount</th>
+                    <th>Last Equity Funding Amount Currency</th>
+                    <th>Last Equity Funding Amount (in USD)</th>
+                    <th>Last Equity Funding Type</th>
+                    <th>Total Equity Funding Amount</th>
+                    <th>Total Equity Funding Amount Currency</th>
+                    <th>Total Equity Funding Amount (in USD)</th>
+                    <th>Total Funding Amount</th>
+                    <th>Total Funding Amount Currency</th>
+                    <th>Total Funding Amount (in USD)</th>
+                    <th>Lead Investor</th>
+                    <th>Valuation at IPO</th>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>Work Email</th>
+                    <th>Linked URL</th>
+                    <th>Source URL</th>
+                    <th>Comment</th>
                 </tr>
               </thead>
               <tbody>
                 {tableData.length > 0 ? (
                   tableData.map((row, index) => (
                     <tr key={index}>
-                      <td>{row.organization_name}</td>
-                      <td>{row.website}</td>
-                      <td>{row.number_of_employees}</td>
-                      <td>{row.estimated_revenue_range}</td>
-                      <td>{row.contact_name}</td>
-                      <td>{row.contact_title}</td>
-                      <td>{row.industries}</td>
-                      <td>{row.headquarters_location}</td>
-                      <td>{row.linkedin_url}</td>
+                        <td>{row.organization_name}</td>
+                        <td>{row.monthly_visits}</td>
+                        <td>{row.founded_date}</td>
+                        <td>{row.operating_status}</td>
+                        <td>{row.company_type}</td>
+                        <td>{row.ipo_status}</td>
+                        <td>{row.number_of_employees}</td>
+                        <td>{row.contact_job_departments}</td>
+                        <td>{row.actively_hiring}</td>
+                        <td>{row.last_funding_date}</td>
+                        <td>{row.estimated_revenue_range}</td>
+                        <td>{row.last_funding_type}</td>
+                        <td>{row.industries}</td>
+                        <td>{row.headquarters_location}</td>
+                        <td>{row.description}</td>
+                        <td>{row.cb_rank_company}</td>
+                        <td>{row.headquarters_regions}</td>
+                        <td>{row.website}</td>
+                        <td>{row.contact_email}</td>
+                        <td>{row.phone_number}</td>
+                        <td>{row.last_funding_amount}</td>
+                        <td>{row.last_funding_amount_currency}</td>
+                        <td>{row.last_funding_amount_usd}</td>
+                        <td>{row.funding_status}</td>
+                        <td>{row.number_of_funding_rounds}</td>
+                        <td>{row.last_equity_funding_amount}</td>
+                        <td>{row.last_equity_funding_amount_currency}</td>
+                        <td>{row.last_equity_funding_amount_usd}</td>
+                        <td>{row.last_equity_funding_type}</td>
+                        <td>{row.total_equity_funding_amount}</td>
+                        <td>{row.total_equity_funding_amount_currency}</td>
+                        <td>{row.total_equity_funding_amount_usd}</td>
+                        <td>{row.total_funding_amount}</td>
+                        <td>{row.total_funding_amount_currency}</td>
+                        <td>{row.total_funding_amount_usd}</td>
+                        <td>{row.lead_investor}</td>
+                        <td>{row.valuation_at_ipo}</td>
+                        <td>{row.contact_name}</td>
+                        <td>{row.title}</td>
+                        <td>{row.work_email}</td>
+                        <td>{row.linkedin_url}</td>
+                        <td>{row.source_url}</td>
+                        <td>{row.comment}</td>
                     </tr>
                   ))
                 ) : (
