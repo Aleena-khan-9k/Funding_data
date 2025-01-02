@@ -154,21 +154,6 @@ function UploadData() {
   overflow-x: auto;
 }
 
-.data-table td.lead-investor {
-  width: 200px; /* Set a fixed width */
-  height: 100px; /* Set a fixed height */
-  white-space: normal; /* Allow text wrapping */
-  overflow-y: auto; /* Enable vertical scrolling for overflow */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-  text-overflow: ellipsis; /* Add ellipsis if necessary */
-  padding: 10px; /* Add padding for better readability */
-  display: block; /* Ensure the content fits inside the box */
-  border: 1px solid #ccc; /* Optional: Add a border for visual distinction */
-  background-color: #f9f9f9; /* Optional: Add a light background color */
-}
-
-
-
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -176,6 +161,11 @@ function UploadData() {
   background-color: #f8f9fa;
   border-radius: 5px;
   overflow: hidden;
+}
+
+.data-table th.leadinvestor,
+.data-table td.leadinvestor {
+  width: 50px; 
 }
 
 .data-table th, .data-table td {
@@ -195,8 +185,8 @@ function UploadData() {
 }
 
 .data-table td {
-  white-space: nowrap; /* Prevent wrapping */
-  overflow: hidden; /* Prevent overflow */
+  // white-space: nowrap; 
+  overflow: hidden; 
   text-overflow: ellipsis; /* Add ellipsis for overflowing text */
 }
 
@@ -207,30 +197,6 @@ function UploadData() {
 .data-table tr:hover {
   background-color: #ddd;
 }
-
-/* For small screens */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-  }
-
-  .main-content {
-    padding: 10px;
-  }
-
-  .search-section {
-    flex-direction: column;
-  }
-}
-
-
-
       `}</style>
 
       <div className="container">
@@ -285,25 +251,7 @@ function UploadData() {
                   onChange={handleSearchChange}
                   placeholder="Search by Website"
                 />
-                {/* <textarea
-                  type="text"
-                  name="headquarters_location"
-                  value={searchQuery.headquarters_location}
-                  onChange={handleSearchChange}
-                  placeholder="Search by Headquarters Location"
-                /> */}
-                
-                {/* <textarea
-                  type="text"
-                  name="linkedin_url"
-                  value={searchQuery.linkedin_url}
-                  onChange={handleSearchChange}
-                  placeholder="Search by LinkedIn URL"
-                  
-                /> */}
-                
-               
-                
+        
               </div>
             
 
@@ -318,16 +266,16 @@ function UploadData() {
                     <th>Company Type</th>
                     <th>IPO Status</th>
                     <th>Number of Employees</th>
-                    <th>Contact Job Departments</th>
+                    <th style = {{ minWidth : "250px"}}>Contact Job Departments</th>
                     <th>Actively Hiring</th>
                     <th>Last Funding Date</th>
                     <th>Estimated Revenue Range</th>
                     <th>Last Funding Type</th>
-                    <th>Industries</th>
+                    <th style = {{ minWidth : "250px"}}>Industries</th>
                     <th>Headquarters Location</th>
-                    <th>Description</th>
+                    <th style = {{ minWidth : "250px"}}>Description</th>
                     <th>CB Rank (Company)</th>
-                    <th>Headquarters Regions</th>
+                    <th style = {{ minWidth : "250px"}}>Headquarters Regions</th>
                     <th>Website</th>
                     <th>Contact Email</th>
                     <th>Phone Number</th>
@@ -346,13 +294,13 @@ function UploadData() {
                     <th>Total Funding Amount</th>
                     <th>Total Funding Amount Currency</th>
                     <th>Total Funding Amount (in USD)</th>
-                    <th>Lead Investor</th>
+                    <th style = {{ minWidth : "200px"}}>Lead Investor</th>
                     <th>Valuation at IPO</th>
                     <th>Name</th>
                     <th>Title</th>
                     <th>Work Email</th>
                     <th>Linked URL</th>
-                    <th>Source URL</th>
+                    <th style = {{minWidth : "200px"}}>Source URL</th>
                     <th>Comment</th>
                 </tr>
               </thead>
@@ -398,7 +346,7 @@ function UploadData() {
                         <td>{row.lead_investor}</td>
                         <td>{row.valuation_at_ipo}</td>
                         <td>{row.contact_name}</td>
-                        <td>{row.title}</td>
+                        <td>{row.contact_title}</td>
                         <td>{row.work_email}</td>
                         <td>{row.linkedin_url}</td>
                         <td>{row.source_url}</td>
